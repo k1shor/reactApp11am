@@ -1,7 +1,20 @@
 import React from 'react'
-import { Link } from 'react-router-dom'
+import { Link, Navigate, useNavigate } from 'react-router-dom'
+import { isAuthenticated, signout } from '../api/userApi'
 
 const Nav = () => {
+    const { user } = isAuthenticated()
+    const navigate = useNavigate()
+
+    const signoutHandler = () => {
+        signout()
+        .then(data=>{
+            console.log(data.message)
+            navigate('/')
+        })
+        .catch(error=>console.log(error))
+    }
+
     return (
         <div>
             <div className='row pt-1 bg-dark'>
@@ -15,9 +28,30 @@ const Nav = () => {
                     </form>
                 </div>
                 <div className='col-md-3 d-flex justify-content-evenly'>
-                    <Link to = "/signin"><i className="bi bi-box-arrow-in-right fs-3 text-white"></i></Link>
-                    <Link to = '/register'><i className="bi bi-person-plus fs-3 text-white"></i></Link>
-                    <Link to = '/cart'><i className="bi bi-cart fs-3 text-white"></i></Link>
+                    {!user &&
+                        <>
+                            <Link to="/signin"><i className="bi bi-box-arrow-in-right fs-3 text-white"></i></Link>
+                            <Link to='/register'><i className="bi bi-person-plus fs-3 text-white"></i></Link>
+                            <Link to='/cart'><i className="bi bi-cart fs-3 text-white"></i></Link>
+
+                        </>
+                    }
+
+                    {
+                        user && user.role === 1 &&
+                        <Link to="/admindashboard"><i class="bi bi-laptop fs-3 text-white"></i></Link>
+                    }
+                    {
+                        user && user.role === 0 &&
+                        <>
+                            <Link to="/userprofile"><i class="bi bi-person-circle fs-3 text-white"></i></Link>
+                            <Link to='/cart'><i className="bi bi-cart fs-3 text-white"></i></Link>
+                        </>
+                    }
+                    {user &&
+                        <Link to='#'><i class="bi bi-box-arrow-right fs-3 text-white" onClick={signoutHandler}></i></Link>
+                    }
+
                 </div>
             </div>
 
@@ -29,7 +63,7 @@ const Nav = () => {
                     </button>
                     <div className="collapse navbar-collapse" id="navbarSupportedContent">
                         <ul className="navbar-nav me-auto mb-2 mb-lg-0 d-flex justify-content-evenly w-50 mx-auto">
-                            
+
                             <li className="nav-item">
                                 <Link className="nav-link active" aria-current="page" to="/">Home</Link>
                             </li>
@@ -45,7 +79,7 @@ const Nav = () => {
                             <li className="nav-item">
                                 <Link className="nav-link" to="/contact">Contact</Link>
                             </li>
-                            
+
 
                         </ul>
 
