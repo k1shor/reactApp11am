@@ -21,6 +21,7 @@ import ViewCategories from './components/Pages/Admin/ViewCategories'
 import CategoryDetails from './components/Pages/Admin/CategoryDetails'
 import AdminRoute from './Route/AdminRoute'
 import PrivateRoute from './Route/PrivateRoute'
+import AddProduct from './components/Pages/Admin/AddProduct'
 
 const MyRoutes = () => {
   return (
@@ -52,6 +53,7 @@ const MyRoutes = () => {
           <Route path='/admin/addcategory' element={<AddCategory />} />
           <Route path='/admin/viewcategory' element={<ViewCategories />} />
           <Route path='/admin/category/:id' element={<CategoryDetails />} />
+          <Route path='/admin/addproduct' element={<AddProduct/>}/>
         </Route>
 
         {/* hooks  */}
