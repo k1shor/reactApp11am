@@ -3,7 +3,7 @@ import Carousel from '../Carousel'
 import Footer from '../Layout/Footer'
 import Nav from '../Layout/Nav'
 import Products from '../Products'
-import './home.css'
+
 
 
 const Home = () => {

@@ -36,7 +36,7 @@ const AdminSidebar = ({name,email}) => {
                         </Link>
                     </li>
                     <li>
-                        <Link to="#" className="nav-link text-white">
+                        <Link to="/admin/products" className="nav-link text-white">
                             
                             View Products
                         </Link>

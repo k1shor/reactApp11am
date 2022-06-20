@@ -54,3 +54,17 @@ export const deleteCategory = (id, token) => {
     .then(res=>res.json())
     .catch(err=>console.log(err))
 }
+
+export const filterProduct = (sortBy, order, limit, skip, filters)=>{
+    // const data = {skip, filters}
+    return fetch(`${API}/filterProduct?sortBy=${sortBy}&order=${order}&limit=${limit}&skip=${skip}`,{
+        method:"POST",
+        headers:{
+            Accept:"application/json",
+            "Content-Type":"application/json"
+        },
+        body: JSON.stringify(filters)
+    })
+    .then(res=>res.json())
+    .catch(err=>console.log(err))
+}

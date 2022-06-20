@@ -6,6 +6,9 @@ const Cart = () => {
     return (
         <>
         <Nav/>
+
+        
+
         <div className='container mx-auto'>
             <table className="table my-5 shadow-lg table-striped table-hover text-center">
                 <thead>

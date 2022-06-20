@@ -22,6 +22,9 @@ import CategoryDetails from './components/Pages/Admin/CategoryDetails'
 import AdminRoute from './Route/AdminRoute'
 import PrivateRoute from './Route/PrivateRoute'
 import AddProduct from './components/Pages/Admin/AddProduct'
+import ProductDetails from './components/Pages/ProductDetails'
+import UpdateProduct from './components/Pages/UpdateProduct'
+import ProductsInAdminPage from './components/Pages/ProductsInAdminPage'
 
 const MyRoutes = () => {
   return (
@@ -47,13 +50,17 @@ const MyRoutes = () => {
         <Route path='/email/confirmation/:token' element={<UserConfirmation />} />
         <Route path='/forgetpassword' element={<ForgetPassword />} />
         <Route path='/resetpassword/:token' element={<ResetPassword />} />
+        <Route path='/product/:product_id' element={<ProductDetails />} />
 
         <Route path='/' element={<AdminRoute />}>
           <Route path='/admin/dashboard' element={<AdminDashboard />} />
           <Route path='/admin/addcategory' element={<AddCategory />} />
           <Route path='/admin/viewcategory' element={<ViewCategories />} />
           <Route path='/admin/category/:id' element={<CategoryDetails />} />
-          <Route path='/admin/addproduct' element={<AddProduct/>}/>
+          <Route path='/admin/addproduct' element={<AddProduct />} />
+          <Route path='/product/update/:product_id' element={<UpdateProduct />} />
+          <Route path='/admin/products' element={<ProductsInAdminPage/>}/>
+
         </Route>
 
         {/* hooks  */}

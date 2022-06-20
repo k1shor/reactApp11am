@@ -39,7 +39,7 @@ const Nav = () => {
 
                     {
                         user && user.role === 1 &&
-                        <Link to="/admindashboard"><i class="bi bi-laptop fs-3 text-white"></i></Link>
+                        <Link to="/admin/dashboard"><i class="bi bi-laptop fs-3 text-white"></i></Link>
                     }
                     {
                         user && user.role === 0 &&
