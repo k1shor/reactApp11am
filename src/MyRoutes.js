@@ -26,6 +26,7 @@ import ProductDetails from './components/Pages/ProductDetails'
 import UpdateProduct from './components/Pages/UpdateProduct'
 import ProductsInAdminPage from './components/Pages/ProductsInAdminPage'
 
+
 const MyRoutes = () => {
   return (
     <BrowserRouter>
@@ -67,6 +68,8 @@ const MyRoutes = () => {
         <Route path='/count' element={<Count />} />
         <Route path='/fetchdata' element={<FetchData />} />
         <Route path='/main' element={<Main />} />
+
+        
 
       </Routes>
     </BrowserRouter>

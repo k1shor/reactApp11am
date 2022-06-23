@@ -5,6 +5,8 @@ import { isAuthenticated } from '../api/userApi'
 import Card from '../Card'
 import Footer from '../Layout/Footer'
 import Nav from '../Layout/Nav'
+import { useDispatch } from 'react-redux'
+import { addItemToCart } from '../reducers/actions/cartActions'
 
 const ProductDetails = () => {
     const params = useParams()
@@ -13,6 +15,8 @@ const ProductDetails = () => {
     const [product, setProduct] = useState({})
     const [error, setError] = useState('')
     const [relatedProducts, setRelatedProducts] = useState([])
+
+    const dispatch = useDispatch()
 
     useEffect(() => {
         productDetails(product_id)
@@ -46,6 +50,10 @@ const ProductDetails = () => {
         }
     }
 
+    const addItemsToCart = () => {
+        dispatch(addItemToCart(product_id, 1))
+    }
+
     return (
         <>
             <Nav />
@@ -64,7 +72,7 @@ const ProductDetails = () => {
                         isAuthenticated() && isAuthenticated().user.role === 1 ?
                             <Link to ={`/product/update/${product_id}`}><button className='btn btn-warning'>UPDATE PRODUCT</button></Link>
                             :
-                            <button className='btn btn-warning'>ADD TO CART</button>
+                            <button className='btn btn-warning' onClick={addItemsToCart}>ADD TO CART</button>
                     }
 
 

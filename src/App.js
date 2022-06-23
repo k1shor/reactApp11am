@@ -1,13 +1,15 @@
-import logo from './logo.svg';
 import './App.css';
-import First from './components/First';
 import MyRoutes from './MyRoutes';
+import { Provider } from 'react-redux';
+import store from './components/reducers/store';
 
 function App() {
   return (
-    <div className="App">
-      <MyRoutes/>
-    </div>
+    <Provider store={store}>
+      <div className="App">
+        <MyRoutes />
+      </div>
+    </Provider>
   );
 }
 
