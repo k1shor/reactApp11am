@@ -7,6 +7,7 @@ import Footer from '../Layout/Footer'
 import Nav from '../Layout/Nav'
 import { prices } from '../Prices'
 import Radiobutton from '../Radiobutton'
+import store from '../reducers/store'
 
 const Products_page = () => {
     const [products, setProducts] = useState([])
@@ -53,6 +54,7 @@ const Products_page = () => {
                 else {
                     setProducts(data.filterProduct)
                     setSize(data.size)
+                    console.log(store)
                 }
             })
             .catch(err => console.log(err))

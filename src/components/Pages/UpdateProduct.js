@@ -74,17 +74,18 @@ const UpdateProduct = () => {
     }
 
     const clickSubmit = e => {
+        setError('')
+        setSuccess(false)
+
         e.preventDefault()
         // console.log(formData)
         updateProduct(product._id, formData, token)
         .then(data=>{
             if(data.error){
                 setError(data.error)
-                setSuccess(false)
             }
             else{
                 setSuccess(true)
-                setError('')
             }
         })
         .catch(err=>console.log(err))

@@ -5,11 +5,11 @@ import store from './components/reducers/store';
 
 function App() {
   return (
-    <Provider store={store}>
-      <div className="App">
+    <div className="App">
+      <Provider store={store}>
         <MyRoutes />
-      </div>
-    </Provider>
+      </Provider>
+    </div>
   );
 }
 

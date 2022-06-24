@@ -1,12 +1,14 @@
 import React, { useEffect, useState } from 'react'
+import { useDispatch } from 'react-redux'
 import { Link, useParams } from 'react-router-dom'
 import { productDetails, relatedProduct } from '../api/productApi'
 import { isAuthenticated } from '../api/userApi'
 import Card from '../Card'
 import Footer from '../Layout/Footer'
 import Nav from '../Layout/Nav'
-import { useDispatch } from 'react-redux'
 import { addItemToCart } from '../reducers/actions/cartActions'
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 const ProductDetails = () => {
     const params = useParams()
@@ -17,7 +19,6 @@ const ProductDetails = () => {
     const [relatedProducts, setRelatedProducts] = useState([])
 
     const dispatch = useDispatch()
-
     useEffect(() => {
         productDetails(product_id)
             .then(data => {
@@ -52,10 +53,12 @@ const ProductDetails = () => {
 
     const addItemsToCart = () => {
         dispatch(addItemToCart(product_id, 1))
+        toast.success(`${product.product_name} has been added to Cart.`)
     }
 
     return (
         <>
+        <ToastContainer theme='colored' position='top-right'/>
             <Nav />
             {showError()}
             <div className='container mx-auto m-5 p-5 d-flex shadow'>
@@ -70,7 +73,7 @@ const ProductDetails = () => {
 
                     {
                         isAuthenticated() && isAuthenticated().user.role === 1 ?
-                            <Link to ={`/product/update/${product_id}`}><button className='btn btn-warning'>UPDATE PRODUCT</button></Link>
+                            <Link to={`/product/update/${product_id}`}><button className='btn btn-warning'>UPDATE PRODUCT</button></Link>
                             :
                             <button className='btn btn-warning' onClick={addItemsToCart}>ADD TO CART</button>
                     }
@@ -84,7 +87,7 @@ const ProductDetails = () => {
                 <h5>Related Products</h5>
                 <div className="row row-cols-1 row-cols-md-3 row-cols-lg-4 g-4 my-5">
                     {
-                        relatedProducts.slice(0,4).map(item => {
+                        relatedProducts.slice(0, 4).map(item => {
                             return <Card item={item} key={item._id} />
                         })
                     }
