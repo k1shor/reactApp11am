@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react'
 import Footer from '../Layout/Footer'
 import Nav from '../Layout/Nav'
 import { useSelector, useDispatch } from 'react-redux'
-import { removeItemFromCart } from '../reducers/actions/cartActions'
+import { addItemToCart, removeItemFromCart } from '../reducers/actions/cartActions'
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 
@@ -14,7 +14,7 @@ const Cart = () => {
     const [order_total, setOrderTotal] = useState(0)
 
     const dispatch = useDispatch()
-    
+
     useEffect(() => {
         if(cart_items.length>0){
             console.log(cart_items)
@@ -32,7 +32,29 @@ const Cart = () => {
 
     const removeFromCart = (id) => {
         dispatch(removeItemFromCart(id))
-        toast("item removed from cart")
+        toast.error("item removed from cart")
+    }
+
+    const increaseQuantity = (id, quantity, stock) => {
+        let new_quantity = quantity + 1
+        if(new_quantity==stock){
+            toast.error('cannot increase number')
+            return
+        }
+        console.log(id, new_quantity)
+        dispatch(addItemToCart(id, new_quantity))
+        toast.success('item quantity increased')
+    }
+
+    const decreaseQuantity = (id, quantity) => {
+        let new_quantity = quantity - 1
+        if(new_quantity===0){
+            toast.error("cannot reduce number")
+            return
+        }
+        dispatch(addItemToCart(id, new_quantity))
+        toast.success("item quantity reduced")
+
     }
 
     return (
@@ -64,9 +86,9 @@ const Cart = () => {
                                         </td>
                                         <td width={'15%'}>
                                             <div className='d-flex'>
-                                                <button className='btn btn-warning'>-</button>
+                                                <button className='btn btn-warning' onClick={()=>decreaseQuantity(item.product, item.quantity)}>-</button>
                                                 <input type={'text'} value={item.quantity} readOnly className='form-control text-center' />
-                                                <button className='btn btn-success'>+</button>
+                                                <button className='btn btn-success' onClick={()=>increaseQuantity(item.product, item.quantity, item.stock)}>+</button>
 
                                             </div>
                                         </td>

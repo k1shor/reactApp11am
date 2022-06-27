@@ -13,7 +13,7 @@ export const addItemToCart = (id, quantity) => async (dispatch, getState) => {
             price: data.product_price,
             image: data.product_image,
             stock: data.count_in_stock,
-            quantity
+            quantity 
         }
     })
     localStorage.setItem('cartItems', JSON.stringify(getState().cart.cartItems))
