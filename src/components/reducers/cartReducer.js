@@ -10,9 +10,9 @@ const cartReducer = (state = { cartItems: [], shipping_info: {} }, action) => {
     switch (action.type) {
         case ADD_TO_CART:
             const item = action.payload
-            const itemExists = state.cartItems.find(i => i === item)
+            const itemExists = state.cartItems.find(i => i.product == item.product)
             if (itemExists) {
-                return state
+                return ({...state})
             }
             else {
                 return ({ ...state, cartItems: [...state.cartItems, item] })
@@ -21,7 +21,7 @@ const cartReducer = (state = { cartItems: [], shipping_info: {} }, action) => {
         case REMOVE_FROM_CART:
             return {
                 ...state,
-                cartItems: state.cartItems.filter(item => item !== action.payload)
+                cartItems: state.cartItems.filter(item => item.product != action.payload.product)
             }
 
         default:
