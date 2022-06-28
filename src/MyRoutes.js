@@ -25,6 +25,8 @@ import AddProduct from './components/Pages/Admin/AddProduct'
 import ProductDetails from './components/Pages/ProductDetails'
 import UpdateProduct from './components/Pages/UpdateProduct'
 import ProductsInAdminPage from './components/Pages/ProductsInAdminPage'
+import ConfirmOrder from './components/Pages/ConfirmOrder'
+import Shipping from './components/Pages/Shipping'
 
 
 const MyRoutes = () => {
@@ -37,9 +39,7 @@ const MyRoutes = () => {
         <Route path='/' element={<Home />} />
         <Route path='/signin' element={<Signin />} />
         <Route path='/register' element={<Signup />} />
-        <Route path='/' element={<PrivateRoute />}>
-          <Route path='/cart' element={<Cart />} />
-        </Route>
+        
 
 
         <Route path='/products' element={<Products_page />} />
@@ -62,6 +62,12 @@ const MyRoutes = () => {
           <Route path='/product/update/:product_id' element={<UpdateProduct />} />
           <Route path='/admin/products' element={<ProductsInAdminPage/>}/>
 
+        </Route>
+
+        <Route path='/' element={<PrivateRoute />}>
+          <Route path='/cart' element={<Cart />} />
+          <Route path='/confirmOrder' element={<ConfirmOrder/>}/>
+          <Route path='/shipping' element={<Shipping/>}/>
         </Route>
 
         {/* hooks  */}

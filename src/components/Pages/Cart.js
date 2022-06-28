@@ -5,6 +5,7 @@ import { useSelector, useDispatch } from 'react-redux'
 import { addItemToCart, removeItemFromCart } from '../reducers/actions/cartActions'
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
+import { Link } from 'react-router-dom'
 
 const Cart = () => {
     // const cart_items = JSON.parse(localStorage.getItem("cart_items"))
@@ -113,8 +114,11 @@ const Cart = () => {
                         <p>Order Items: <br/><b className='fs-3'> {order_quantity}</b></p>
                         <p>Total Order Price: <br/><b className='fs-3'>Rs. {order_total}</b> </p>
                         <hr className='my-2' />
+                        {cart_items.length>0 &&
+                        <Link to = '/confirmorder'>
                         <button className='btn btn-warning'>Confirm Order</button>
-
+                        </Link>
+                        }
                     </div>
                 </div>
             </div>
