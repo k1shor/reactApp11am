@@ -27,6 +27,7 @@ import UpdateProduct from './components/Pages/UpdateProduct'
 import ProductsInAdminPage from './components/Pages/ProductsInAdminPage'
 import ConfirmOrder from './components/Pages/ConfirmOrder'
 import Shipping from './components/Pages/Shipping'
+import Payment from './components/Pages/Payment'
 
 
 const MyRoutes = () => {
@@ -68,12 +69,14 @@ const MyRoutes = () => {
           <Route path='/cart' element={<Cart />} />
           <Route path='/confirmOrder' element={<ConfirmOrder/>}/>
           <Route path='/shipping' element={<Shipping/>}/>
+          <Route path='/payment' element = {<Payment/>}/>
         </Route>
 
         {/* hooks  */}
         <Route path='/count' element={<Count />} />
         <Route path='/fetchdata' element={<FetchData />} />
         <Route path='/main' element={<Main />} />
+        
 
         
 
