@@ -2,9 +2,14 @@ import React, { useState, useEffect } from 'react'
 import CheckoutProgress from '../CheckoutProgress'
 import Footer from '../Layout/Footer'
 import Nav from '../Layout/Nav'
-import { Link } from 'react-router-dom'
-import { useSelector } from 'react-redux'
+import { Link, useNavigate } from 'react-router-dom'
+import { useDispatch, useSelector } from 'react-redux'
 import { toast, ToastContainer } from 'react-toastify'
+import { CardCvcElement, CardExpiryElement, CardNumberElement, useElements, useStripe } from '@stripe/react-stripe-js'
+import axios from 'axios'
+import { isAuthenticated } from '../api/userApi'
+import { API } from '../../config'
+import { createOrder } from '../reducers/actions/orderAction'
 
 const Payment = () => {
     const cart_items = useSelector(state => state.cart.cartItems)
@@ -14,7 +19,32 @@ const Payment = () => {
     const [order_quantity, setOrderQuantity] = useState(0)
     const [order_total, setOrderTotal] = useState(0)
 
+    const stripe = useStripe()
+    const elements = useElements()
 
+    const {user, token} = isAuthenticated()
+
+    const dispatch = useDispatch()
+    const navigate = useNavigate()
+
+    let  order = {
+        orderItems: cart_items,
+        user: user._id,
+        total_price: order_total,
+        shipping_address: `${shipping_info.street}, ${shipping_info.city}, ${shipping_info.country}`,
+        shipping_address2: `${shipping_info.street2}, ${shipping_info.city}, ${shipping_info.country}`,
+        phone: shipping_info.phone
+    }
+    const options = {
+        style: {
+            base: {
+                fontSize: '16px'
+            },
+            invalid: {
+                color: '#ff0000'
+            }
+        }
+    }
     useEffect(() => {
         if (cart_items.length > 0) {
             console.log(cart_items)
@@ -30,44 +60,111 @@ const Payment = () => {
         }
     }, [cart_items])
 
+    const paymentHandle = async (event) => {
+        event.preventDefault()
+        document.querySelector('#pay_btn').disabled = true
+try{
+        const config = {
+            headers: {
+                'Content-Type': 'application/json',
+                // Authorization: `Bearer ${token}`
+            }
+        }
+        const paymentData = { 
+            amount: order_total * 100
+        }
+        let response = await axios.post(`${API}/processpayment`, paymentData, config)
+        let client_secret = response.data.client_secret
+
+        console.log(client_secret)
+        if(!stripe || !elements){
+            return
+        }
+
+        let result =await stripe.confirmCardPayment(`${client_secret}`,{
+            payment_method: {
+                card: elements.getElement(CardNumberElement),
+                billing_details:{
+                    name: user.name,
+                    email: user.email
+                }
+            }
+        })
+
+        if(result.error){
+            toast.error(result.error.message)
+            document.querySelector('#pay_btn').disabled = false
+        }
+        else{
+            if(result.paymentIntent.status === 'succeeded'){
+                order.paymentInfo = {
+                    id: (await result).paymentIntent.id,
+                    status : (await result).paymentIntent.status
+                }
+                dispatch(createOrder(order, token))
+                toast.success("Your order has been placed successfully.")
+                localStorage.removeItem('cartItems')
+                document.getElementById('pay_btn').disabled = true;
+                navigate('/paymentsuccess')
+
+            }
+        }
+    }
+    catch(error){
+        toast.error (error.message)
+    }
+    }
+
 
     return (
         <>
             <ToastContainer theme='colored' position='top-right' />
             <Nav />
             <CheckoutProgress ConfirmOrder Shipping Payment />
-            
+
 
 
 
             <div className='d-flex'>
                 <div className='container mx-auto' style={{ width: '65%' }}>
-<h4 className='mt-5'>Payment Information</h4>
-<div className='mx-auto w-100 text-start p-5 shadow'></div>
+                    <h4 className='mt-5'>Payment Information</h4>
+                    <div className='mx-auto w-100 text-start p-5 shadow'>
+                        <h4>Card Information</h4>
+                        <hr className='mb-3' />
+                        <label htmlFor='card_number'>Card Number</label>
+                        <CardNumberElement type='text' className='form-control mb-3' id='card_number' options={options} />
+                        <label htmlFor='card_expiry'>Valid Up to</label>
+                        <CardExpiryElement type='text' className='form-control mb-3' id='card_expiry' options={options} />
+                        <label htmlFor='card_cvc'> CVC</label>
+                        <CardCvcElement type='text' className='form-control' id='card-cvc' options={options} />
+
+                        <button className='btn btn-warning form-control mt-3' onClick={paymentHandle} id='pay_btn'>Pay Now</button>
+
+                    </div>
 
 
                     <h4 className='mt-5'>Shipping Information</h4>
-                <div className='d-flex mx-auto w-100 text-start justify-content-evenly p-5 shadow'>
-                <div className='shipping_ifo'>Shipping Address:
-                    Street: {shipping_info.street}, <br />
-                    City: {shipping_info.city}, <br />
-                    Country: {shipping_info.country}<br />
-                    Phone: {shipping_info.phone}
-                </div>
-                {
-                    shipping_info.street2 &&
-                    <div className='shipping_ifo'>Alternate Shipping Address:
-                        Street: {shipping_info.street2}, <br />
-                        City: {shipping_info.city}, <br />
-                        Country: {shipping_info.country}<br />
-                        Phone: {shipping_info.phone}
+                    <div className='d-flex mx-auto w-100 text-start justify-content-evenly p-5 shadow'>
+                        <div className='shipping_ifo'>Shipping Address:
+                            Street: {shipping_info.street}, <br />
+                            City: {shipping_info.city}, <br />
+                            Country: {shipping_info.country}<br />
+                            Phone: {shipping_info.phone}
+                        </div>
+                        {
+                            shipping_info.street2 &&
+                            <div className='shipping_ifo'>Alternate Shipping Address:
+                                Street: {shipping_info.street2}, <br />
+                                City: {shipping_info.city}, <br />
+                                Country: {shipping_info.country}<br />
+                                Phone: {shipping_info.phone}
+                            </div>
+
+                        }
+                        <div className='alternate-shipping_info'></div>
                     </div>
 
-                }
-                <div className='alternate-shipping_info'></div>
-            </div>
-
-<h4 className='mt-5'>Order Information</h4>
+                    <h4 className='mt-5'>Order Information</h4>
                     {cart_items.length > 0 ?
                         <table className="table mb-5 shadow-lg table-striped table-hover text-center align-middle table-bordered ">
                             <thead>

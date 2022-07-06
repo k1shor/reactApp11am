@@ -28,6 +28,10 @@ import ProductsInAdminPage from './components/Pages/ProductsInAdminPage'
 import ConfirmOrder from './components/Pages/ConfirmOrder'
 import Shipping from './components/Pages/Shipping'
 import Payment from './components/Pages/Payment'
+import PaymentElement from './components/Pages/PaymentElement'
+import UserProfile from './components/Pages/UserProfile'
+import PaymentSuccess from './components/Pages/PaymentSuccess'
+import OrderDetails from './components/Pages/OrderDetails'
 
 
 const MyRoutes = () => {
@@ -69,7 +73,10 @@ const MyRoutes = () => {
           <Route path='/cart' element={<Cart />} />
           <Route path='/confirmOrder' element={<ConfirmOrder/>}/>
           <Route path='/shipping' element={<Shipping/>}/>
-          <Route path='/payment' element = {<Payment/>}/>
+          <Route path='/payment' element = {<PaymentElement/>}/>
+          <Route path='/paymentSuccess' element={<PaymentSuccess/>}/>
+          <Route path='/userprofile' element= {<UserProfile/>}/>
+          <Route path='/order/:order_id' element = {<OrderDetails/>}/>
         </Route>
 
         {/* hooks  */}

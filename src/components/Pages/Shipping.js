@@ -33,6 +33,7 @@ const Shipping = () => {
 
     const saveShipping = () => {
         dispatch(saveShippingInfo(street, street2, city, country, phone))
+        sessionStorage.setItem('orderInfo', order_total)
 
     }
 
