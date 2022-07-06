@@ -7,53 +7,62 @@ import Nav from '../Layout/Nav'
 import { userOrder } from '../reducers/actions/orderAction'
 
 const UserProfile = () => {
-    const {user, token} = isAuthenticated()
-    const order = useSelector(state=>state.userOrder)
-    console.log(order.order)
+    const { user, token } = isAuthenticated()
+
+    const orderStore = useSelector(state => state.userOrder)
+    const orders = orderStore.order
 
     const dispatch = useDispatch()
-    useEffect(()=>{
+    useEffect(() => {
         dispatch(userOrder(user._id, token))
-    },[])
-  return (
-    <>
-    <Nav/>
-    <div className='container mx-auto my-5'>
+    }, [])
+    return (
+        <>
+            <Nav />
+            <div className='container mx-auto my-5'>
+<h4 className='text-center mt-5 border-bottom border-3'>Order History</h4>
+                <table className='table mt-5 shadow-lg'>
+                    <thead>
+                        <tr>
+                            <td>SNO.</td>
+                            <td>No. of items</td>
+                            <td>Products</td>
+                            <td>Total Amount</td>
+                            <td>Status</td>
+                            <td>Action</td>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {
+                            orders &&
+                            orders.map((item, i) => {
+                                return <tr>
+                                    <td>{i + 1}</td>
+                                    <td>
+                                        {item.orderItems.length}
+                                    </td>
+                                    <td>
+                                        {
+                                            item.orderItems.map(product => {
+                                                return <h6>{product.product.product_name}-Rs. {product.product.product_price}</h6>
+                                            })}
+                                    </td>
+                                    <td>Rs. {item.total_price}</td>
+                                    <td>{item.status}</td>
+                                    <td>
+                                        <Link to={`/orderdetails/${item._id}`}>View Details</Link></td>
+                                </tr>
+                            })
 
-        <table className='table'>
-            <thead>
-                <tr>
-                    <td>SNO.</td>
-                    <td>Image</td>
-                    <td>Product</td>
-                    <td>Status</td>
-                </tr>
-            </thead>
+                        }
+                    </tbody>
+                </table>
+            </div>
 
-            <tbody>
-                {
-                    order.order && 
-                    order.order.map((item,i)=>{
-                            return <tr>
-                                <td>{i+1}</td>
-                                <td>{
-                                    item.orderItems.length}
-                                </td>
-                                <td>{item.total_price}</td>
-                                <td>
-                                    <Link to={`/order/${item._id}`}>{item.status}</Link></td>
-                            </tr>
-                        })
-                    
-                }
-            </tbody>
-        </table>
-    </div>
+            <Footer />
 
-    <Footer/>
-        
-    </>
-  )
+        </>
+    )
 }
 
 export default UserProfile

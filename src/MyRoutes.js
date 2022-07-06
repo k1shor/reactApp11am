@@ -76,7 +76,7 @@ const MyRoutes = () => {
           <Route path='/payment' element = {<PaymentElement/>}/>
           <Route path='/paymentSuccess' element={<PaymentSuccess/>}/>
           <Route path='/userprofile' element= {<UserProfile/>}/>
-          <Route path='/order/:order_id' element = {<OrderDetails/>}/>
+          <Route path='/orderdetails/:order_id' element = {<OrderDetails/>}/>
         </Route>
 
         {/* hooks  */}
